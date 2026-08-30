@@ -39,3 +39,16 @@ Read the seven handoff documents, inspect the repositoryâ€™s current GenLay
 - Compared against the provided Kontyn repository. Corrected CIVEC to use the concrete GenVM dependency hash and serialized JSON strings in `TreeMap[str, str]`, fixing the live `Proposal object has no attribute encode` error.
 - Verified schema on StudioNet for the prior valid deployment. Final redeployment after the evidence-path fix: contract `0xC3b96b6d135424fb6C38052C0443104AB95D2dad`, transaction `0x6b4a929716a144de00d9d6dba7b90ddece15ba593c6e433a857df6a4e384e351`.
 - Final smoke create attempt exposed and fixed the evidence-path dict/record mismatch; a fresh final deployment is configured in `.env.local`. Remaining: rerun the smoke lifecycle and npm checks when network/package installation is available, then push.
+
+### 2026-08-30 - CIVEC final contract and smoke verification
+
+- Corrected the contract to keep GenLayer's nondeterministic value path: `request_screening` now fetches public evidence with `gl.nondet.web.get`, asks for a bounded JSON decision with `gl.nondet.exec_prompt`, and validates it through `gl.vm.run_nondet_unsafe`.
+- Fixed owner address handling so CLI/frontend owner values can arrive as either a string or GenLayer `Address`.
+- Final deployed contract: `0xc6bde2Aa643AB5c1d0b2c093F6CAfA849B23AA72`.
+- Final deployment transaction: `0xacef4cf918587a0601055895e90be6e402059a91e532429c52aee61d9033e60f`.
+- Final schema verification passed against `0xc6bde2Aa643AB5c1d0b2c093F6CAfA849B23AA72`.
+- Final smoke proposal id: `civec-final-live-20260830`.
+- Smoke txs accepted: `create_proposal` `0x644b51ed15bb6a296b253c51f2d792aa7d4ada5c0fee9771bed63a622e48dd67`; `add_evidence` `0x5d9361abc56151aac68a4cec23663d38c264b0cae693c61ec8940c66cea7f4ea`; `request_screening` `0xf91a54780b4bd150d8579101346d466bd38570150c038e919321fdbd9f5101a6`; `endorse` `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019`; `close_proposal` `0x03b20389b6d7b9b56794e3ef7eae4f351d73459bc43f0d20339d24a3305401aa`.
+- `request_screening` returned `ABSTAINED` because the smoke evidence URL was public and retrievable but not specific to the sidewalk claim; this verifies abstention and nondeterministic evidence evaluation rather than a fake positive.
+- `npm install` was attempted in normal and escalated modes but hung without creating `node_modules`; frontend `npm run typecheck` and `npm run build` remain unverified on this machine until npm can complete.
+- GitHub push remains blocked until Git Credential Manager is allowed to prompt for the correct account. The local repo origin is `https://github.com/BeatyXO/CIVEC.git`.

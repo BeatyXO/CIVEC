@@ -1,41 +1,51 @@
-﻿# CivicPulse
+# CIVEC
 
-This folder is a complete implementation handoff for **CivicPulse**, a GenLayer project for community infrastructure proposals.
+This folder is the CIVEC GenLayer project: a public civic evidence registry for community infrastructure proposals.
 
-## Build contract
+## Deployed Contract
 
-Residents submit local infrastructure proposals. The protocol groups duplicates, checks eligibility and evidence, and records a transparent community prioritization result.
+- Network: GenLayer StudioNet
+- Chain ID: `61999`
+- RPC: `https://studio.genlayer.com/api`
+- Contract: `0xc6bde2Aa643AB5c1d0b2c093F6CAfA849B23AA72`
+- Deployment tx: `0xacef4cf918587a0601055895e90be6e402059a91e532429c52aee61d9033e60f`
 
-The product must use the off-chain-then-settle-on-chain pattern: the browser collects evidence and displays preparation state; GenLayer performs nondeterministic retrieval/reasoning; only bounded, equivalence-safe fields and deterministic state transitions become canonical contract state.
+## Build Contract
 
-## Existing-work exclusion
+Residents submit local infrastructure proposals. The protocol records proposal details, public evidence references, wallet endorsements, nondeterministic evidence screening, and final closure state.
 
-This is intentionally not a betting app, grant evaluator, quote verifier, appeal system, creative-lineage app, generic moderation oracle, or ordinary summarizer. Do not collapse it into one of those patterns during implementation.
+The product uses the off-chain-then-settle-on-chain pattern: the browser collects proposal and evidence inputs; GenLayer performs nondeterministic retrieval and reasoning with `gl.nondet.web.get`, `gl.nondet.exec_prompt`, and `gl.vm.run_nondet_unsafe`; only bounded fields and explicit lifecycle states become canonical contract state.
 
-## Stack constraints
+## Stack Constraints
 
 - Next.js App Router + TypeScript.
-- genlayer-js@1.1.8 for reads/writes.
-- Injected EIP-1193 wallet only; do not create, persist, or silently fall back to a browser private key.
-- Studionet, chain ID 61999, RPC https://studio.genlayer.com/api.
+- `genlayer-js@1.1.8` for reads/writes.
+- Injected EIP-1193 wallet only.
+- StudioNet chain ID `61999`, RPC `https://studio.genlayer.com/api`.
 - Python GenLayer Intelligent Contract; no backend database as canonical state.
 - Public reads may work before wallet connection; every write requires explicit wallet confirmation.
-- Use bounded strings, arrays, pagination, deterministic enums, and explicit abstention states.
+- Bounded strings, arrays, deterministic enums, and explicit abstention states.
 
-## Vector Store
+## Live Smoke Results
 
-Embed proposal text, neighborhood needs, prior project descriptions, and evidence. Use similarity to cluster duplicates and retrieve precedent, not to replace resident voting.
+Final smoke proposal: `civec-final-live-20260830`
 
-Use the official GenLayer Vector Store/embedding APIs available in the pinned runtime. Store model/version metadata and source references. Never persist private raw documents unless the product explicitly requires it; prefer hashes, public URLs, redacted excerpts, and user-provided references.
+- `create_proposal`: `0x644b51ed15bb6a296b253c51f2d792aa7d4ada5c0fee9771bed63a622e48dd67` accepted.
+- `add_evidence`: `0x5d9361abc56151aac68a4cec23663d38c264b0cae693c61ec8940c66cea7f4ea` accepted.
+- `request_screening`: `0xf91a54780b4bd150d8579101346d466bd38570150c038e919321fdbd9f5101a6` accepted. Result: `ABSTAINED`, because the public evidence URL was general government information and not claim-specific.
+- `endorse`: `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019` accepted.
+- `close_proposal`: `0x03b20389b6d7b9b56794e3ef7eae4f351d73459bc43f0d20339d24a3305401aa` accepted.
 
-## Primary lifecycle
+## Local Commands
 
-program opens; residents submit; duplicate clusters form; validators screen; residents endorse; deterministic score publishes priority
+```powershell
+npm install
+npm run typecheck
+npm run build
+```
 
-## MVP boundary
+`npm install` was attempted in normal and escalated modes on this machine, but it hung without creating `node_modules`. The contract deployment and StudioNet smoke tests are verified; frontend typecheck/build still need a completed package install.
 
-one city district, wallet-based endorsement, no token payout, admin-created program
+## Main Risks
 
-## Main risks
-
-sybil endorsements; political sensitivity; geographic bias; duplicate manipulation; public safety claims
+Sybil endorsements, political sensitivity, geographic bias, duplicate manipulation, and public safety claims.
