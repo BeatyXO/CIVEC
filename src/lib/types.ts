@@ -1,0 +1,1 @@
+export type Proposal={id:string;title:string;neighborhood:string;description:string;criteria:string;owner:string;status:string;evidence:string[];endorsements:number;decision:string;endorsement_count?:number;priority_band?:string;decision_summary?:string};
