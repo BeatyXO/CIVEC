@@ -9,7 +9,7 @@ export default function ProposalPage({ params }: { params: { id: string } }) {
   const { address } = useWallet();
   const [p, setP] = useState<Proposal | null>(null); const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const [reference, setReference] = useState('');
   const load = () => getProposal(params.id).then(setP).catch(e => setError(e instanceof Error ? e.message : 'Record unavailable.'));
-  useEffect(load, [params.id]);
+  useEffect(() => { void load(); }, [params.id]);
   const act = async (label: string, action: () => Promise<unknown>) => { try { setError(''); setNotice(`${label} is settling through GenLayer…`); await action(); setNotice(`${label} completed.`); await load(); } catch (e) { setNotice(''); setError(e instanceof Error ? e.message : `${label} failed.`); } };
   if (error && !p) return <main><header className="topbar"><Link className="wordmark" href="/">CIVEC</Link></header><div className="empty"><h3>Record unavailable</h3><p>{error}</p></div></main>;
   if (!p) return <main><div className="empty"><p>Reading canonical record…</p></div></main>;

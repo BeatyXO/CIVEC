@@ -7,8 +7,8 @@ This folder is the CIVEC GenLayer project: a public civic evidence registry for 
 - Network: GenLayer StudioNet
 - Chain ID: `61999`
 - RPC: `https://studio.genlayer.com/api`
-- Contract: `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`
-- Deployment tx: `0x0f252522d818213348b5471e8313f1ae2397dd0579fecf7303c729bc0a3dffc3`
+- Contract: `0x4B809a01A399E97829AF06Bb75a341D2853F0167`
+- Deployment tx: `0xdb192d2ac562861620e1af14cf956c2d670b79a7e30e3557132d026d9ab82109`
 
 ## Build Contract
 
@@ -28,13 +28,13 @@ The product uses the off-chain-then-settle-on-chain pattern: the browser collect
 
 ## Live Smoke Results
 
-Final smoke proposal: `civec-final-20260831`
+Final smoke proposal: `civec-final-20260831b`
 
-- `create_proposal`: `0xf558273d30f1b740a6da18cad95ed5a1eefa62f25ff787b6feb2f1c2335cd21a` accepted.
-- `add_evidence`: `0x7891f668cdb8664c209c000d92c7de33c100cc7919eb4924eb41cde94bd1f1b0` accepted.
-- `request_screening`: `0x1670f826629d351649091603dbf0843b9abf16cf465dd9c35374c7a5eb349a51` finalized with successful execution.
-- `endorse`: `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019` accepted.
-- `close_proposal`: `0xac93760d85ce9f10c2cb688499f7122d3b4cdf779f31bc657b59a0b8c077d819` accepted.
+- `create_proposal`: `0x1468e7aad295b096721264f1359d171783c1419f5776116616b1bc32e0ffab4a` accepted.
+- `add_evidence`: `0xf5d877841cc6a8a9c503d5378c41ad78570b3310a6d9e202d075cd6b13a0c5db` accepted.
+- `request_screening`: `0xf744ebd0ac75bc8a76b44525228e5a7ad0742b8710a9c77cc2371c8de7c41448` finalized with successful execution.
+- `endorse`: `0xd0b890fc7f22ca99126a3b4b05004ce2d484a84c49c0af5cb9255ec9979b39c0` accepted.
+- `close_proposal`: `0x9979ea72e12477b0a9f356da834b309ee80cefff8e5436f9099aff043df47453` accepted.
 
 ## Local Commands
 

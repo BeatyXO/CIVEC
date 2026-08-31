@@ -44,11 +44,18 @@ Read the seven handoff documents, inspect the repositoryâ€™s current GenLay
 
 - Corrected the contract to keep GenLayer's nondeterministic value path: `request_screening` now fetches public evidence with `gl.nondet.web.get`, asks for a bounded JSON decision with `gl.nondet.exec_prompt`, and validates it through `gl.vm.run_nondet_unsafe`.
 - Fixed owner address handling so CLI/frontend owner values can arrive as either a string or GenLayer `Address`.
-- Final deployed contract: `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`.
-- Final deployment transaction: `0x0f252522d818213348b5471e8313f1ae2397dd0579fecf7303c729bc0a3dffc3`.
-- Schema verification was run against `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`.
-- Final smoke proposal id: `civec-final-20260831`.
+- Final deployed contract: `0x4B809a01A399E97829AF06Bb75a341D2853F0167`.
+- Final deployment transaction: `0xdb192d2ac562861620e1af14cf956c2d670b79a7e30e3557132d026d9ab82109`.
+- Schema verification was run against `0x4B809a01A399E97829AF06Bb75a341D2853F0167`.
+- Final smoke proposal id: `civec-final-20260831b`.
 - Smoke txs accepted: `create_proposal` `0x644b51ed15bb6a296b253c51f2d792aa7d4ada5c0fee9771bed63a622e48dd67`; `add_evidence` `0x5d9361abc56151aac68a4cec23663d38c264b0cae693c61ec8940c66cea7f4ea`; `request_screening` `0xf91a54780b4bd150d8579101346d466bd38570150c038e919321fdbd9f5101a6`; `endorse` `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019`; `close_proposal` `0x03b20389b6d7b9b56794e3ef7eae4f351d73459bc43f0d20339d24a3305401aa`.
 - `request_screening` returned `ABSTAINED` because the smoke evidence URL was public and retrievable but not specific to the sidewalk claim; this verifies abstention and nondeterministic evidence evaluation rather than a fake positive.
 - `npm install` was attempted in normal and escalated modes but hung without creating `node_modules`; frontend `npm run typecheck` and `npm run build` remain unverified on this machine until npm can complete.
 - GitHub push remains blocked until Git Credential Manager is allowed to prompt for the correct account. The local repo origin is `https://github.com/BeatyXO/CIVEC.git`.
+
+### Final correction - 2026-08-31
+
+- Final contract after validator error-handling change: `0x4B809a01A399E97829AF06Bb75a341D2853F0167`.
+- Deployment transaction: `0xdb192d2ac562861620e1af14cf956c2d670b79a7e30e3557132d026d9ab82109`.
+- Fresh lifecycle for `civec-final-20260831b`: create `0x1468e7aad295b096721264f1359d171783c1419f5776116616b1bc32e0ffab4a`; evidence `0xf5d877841cc6a8a9c503d5378c41ad78570b3310a6d9e202d075cd6b13a0c5db`; screening `0xf744ebd0ac75bc8a76b44525228e5a7ad0742b8710a9c77cc2371c8de7c41448`; endorsement `0xd0b890fc7f22ca99126a3b4b05004ce2d484a84c49c0af5cb9255ec9979b39c0`; closure `0x9979ea72e12477b0a9f356da834b309ee80cefff8e5436f9099aff043df47453`.
+- Post-close endorsement rejection: `0x50c6012cf4d4bea7fe940c6b0512e7996d7ebebd8419b193a78204c9ccff03e5`, execution payload `EXPECTED: proposal is closed`.
