@@ -44,7 +44,9 @@ npm run typecheck
 npm run build
 ```
 
-`npm install` was attempted in normal and escalated modes on this machine, but it hung without creating `node_modules`. The contract deployment and StudioNet smoke tests are verified; frontend typecheck/build still need a completed package install.
+Current release status: Vercel deployment from the current head `b8035ce` succeeded, including the production frontend build. Real GenLayer Direct Mode tests and static invariant tests are present, and GenVM static lint passes. The final StudioNet contract is `0x4B809a01A399E97829AF06Bb75a341D2853F0167`.
+
+Separately, local GenVM semantic validation remains limited on this Windows machine by an SDK-cache permission error (`WinError 5`). This does not affect the verified Vercel frontend build or the deployed contract.
 
 ## Main Risks
 
