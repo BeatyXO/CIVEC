@@ -1,6 +1,7 @@
 import { createClient, createAccount } from 'genlayer-js';
 import { TransactionStatus } from 'genlayer-js/types';
 import { config } from './config';
+export type { Proposal } from './types';
 import type { Proposal } from './types';
 const read=()=>createClient({chain:config.chain,account:createAccount()});
 const publicOwner='0x0000000000000000000000000000000000000000';
