@@ -22,7 +22,7 @@ Read the seven handoff documents, inspect the repositoryâ€™s current GenLay
 
 ### 2026-08-30 - CIVEC implementation
 
-- Built `contracts/civec.py` with bounded proposal/evidence inputs, explicit lifecycle states, single-address endorsements, screening/abstention, pagination, public getters, and audit records.
+- Built `contracts/civec.py` with bounded proposal/evidence inputs, global public records, explicit owner checks, lifecycle states, single-address endorsements, screening/abstention, and public getters.
 - Built the Next.js App Router frontend under `app/` and `src/lib/`: public proposal wall, honest loading/empty/unavailable states, submission form, deep-link dossier route, StudioNet config, direct GenLayer read/write wrapper, and injected-wallet state.
 - Added strict TypeScript config, pinned package manifest, and `.env.example` with `NEXT_PUBLIC_CIVEC_CONTRACT_ADDRESS`.
 - Verification attempted: `npm install --no-audit --no-fund` and `npm run typecheck`; the environment did not materialize `node_modules`, so `tsc` was unavailable. No deployment was attempted because no contract address is configured yet.
@@ -44,10 +44,10 @@ Read the seven handoff documents, inspect the repositoryâ€™s current GenLay
 
 - Corrected the contract to keep GenLayer's nondeterministic value path: `request_screening` now fetches public evidence with `gl.nondet.web.get`, asks for a bounded JSON decision with `gl.nondet.exec_prompt`, and validates it through `gl.vm.run_nondet_unsafe`.
 - Fixed owner address handling so CLI/frontend owner values can arrive as either a string or GenLayer `Address`.
-- Final deployed contract: `0x13a59dC130a38421f89401f29e5f7796F6738c00`.
-- Final deployment transaction: `0x2727d13e3e3f47cc327d5861049bc7926582622e14cfb1ab82b02c5c9c535ec0`.
-- Final schema verification is required against `0x13a59dC130a38421f89401f29e5f7796F6738c00` before release.
-- Final smoke proposal id: `civec-final-live-20260830`.
+- Final deployed contract: `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`.
+- Final deployment transaction: `0x0f252522d818213348b5471e8313f1ae2397dd0579fecf7303c729bc0a3dffc3`.
+- Schema verification was run against `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`.
+- Final smoke proposal id: `civec-final-20260831`.
 - Smoke txs accepted: `create_proposal` `0x644b51ed15bb6a296b253c51f2d792aa7d4ada5c0fee9771bed63a622e48dd67`; `add_evidence` `0x5d9361abc56151aac68a4cec23663d38c264b0cae693c61ec8940c66cea7f4ea`; `request_screening` `0xf91a54780b4bd150d8579101346d466bd38570150c038e919321fdbd9f5101a6`; `endorse` `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019`; `close_proposal` `0x03b20389b6d7b9b56794e3ef7eae4f351d73459bc43f0d20339d24a3305401aa`.
 - `request_screening` returned `ABSTAINED` because the smoke evidence URL was public and retrievable but not specific to the sidewalk claim; this verifies abstention and nondeterministic evidence evaluation rather than a fake positive.
 - `npm install` was attempted in normal and escalated modes but hung without creating `node_modules`; frontend `npm run typecheck` and `npm run build` remain unverified on this machine until npm can complete.

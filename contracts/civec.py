@@ -38,17 +38,17 @@ class CIVEC(gl.Contract):
             raise gl.vm.UserError("EXPECTED: " + field + " exceeds its bound")
         return value
 
-    def _key(self, owner: Address, proposal_id: str) -> str:
-        return owner.as_hex + ":" + proposal_id
-
-    def _get(self, owner: Address, proposal_id: str) -> dict:
-        key = self._key(owner, proposal_id)
-        if key not in self.proposals:
+    def _get(self, proposal_id: str) -> dict:
+        if proposal_id not in self.proposals:
             raise gl.vm.UserError("EXPECTED: proposal not found")
-        return json.loads(self.proposals[key])
+        return json.loads(self.proposals[proposal_id])
+
+    def _require_owner(self, proposal: dict):
+        if proposal["owner"] != gl.message.sender_address.as_hex:
+            raise gl.vm.UserError("EXPECTED: caller is not the proposal owner")
 
     def _save(self, proposal: dict):
-        self.proposals[self._key(self._address(proposal["owner"]), proposal["id"])] = json.dumps(proposal, sort_keys=True)
+        self.proposals[proposal["id"]] = json.dumps(proposal, sort_keys=True)
 
     def _screen(self, proposal: dict) -> dict:
         def safe_abstain(reason: str) -> dict:
@@ -100,23 +100,24 @@ class CIVEC(gl.Contract):
     @gl.public.write
     def create_proposal(self, proposal_id: str, title: str, neighborhood: str, description: str, criteria: str) -> None:
         owner = gl.message.sender_address
-        key = self._key(owner, proposal_id)
-        if key in self.proposals:
+        if proposal_id in self.proposals:
             raise gl.vm.UserError("EXPECTED: proposal already exists")
-        self.proposals[key] = json.dumps({"id": proposal_id, "owner": owner.as_hex, "title": self._text(title, 120, "title"), "neighborhood": self._text(neighborhood, 80, "neighborhood"), "description": self._text(description, 1200, "description"), "criteria": self._text(criteria, 500, "criteria"), "status": "OPEN", "evidence": [], "endorsements": [], "decision": ""}, sort_keys=True)
+        self.proposals[proposal_id] = json.dumps({"id": proposal_id, "owner": owner.as_hex, "title": self._text(title, 120, "title"), "neighborhood": self._text(neighborhood, 80, "neighborhood"), "description": self._text(description, 1200, "description"), "criteria": self._text(criteria, 500, "criteria"), "status": "OPEN", "evidence": [], "endorsements": [], "decision": ""}, sort_keys=True)
 
     @gl.public.write
     def add_evidence(self, proposal_id: str, reference: str) -> None:
-        proposal = self._get(gl.message.sender_address, proposal_id)
+        proposal = self._get(proposal_id); self._require_owner(proposal)
         if proposal["status"] != "OPEN":
             raise gl.vm.UserError("EXPECTED: proposal is not accepting evidence")
-        if len(proposal["evidence"]) >= 8:
+        if len(proposal["evidence"]) >= 3:
             raise gl.vm.UserError("EXPECTED: evidence limit reached")
         proposal["evidence"].append(self._text(reference, 400, "reference")); self._save(proposal)
 
     @gl.public.write
-    def endorse(self, owner: str, proposal_id: str) -> None:
-        proposal = self._get(self._address(owner), proposal_id)
+    def endorse(self, proposal_id: str) -> None:
+        proposal = self._get(proposal_id)
+        if proposal["status"] == "CLOSED":
+            raise gl.vm.UserError("EXPECTED: proposal is closed")
         actor = gl.message.sender_address.as_hex
         if actor in proposal["endorsements"]:
             raise gl.vm.UserError("EXPECTED: address already endorsed")
@@ -124,7 +125,7 @@ class CIVEC(gl.Contract):
 
     @gl.public.write
     def request_screening(self, proposal_id: str) -> dict:
-        proposal = self._get(gl.message.sender_address, proposal_id)
+        proposal = self._get(proposal_id); self._require_owner(proposal)
         if proposal["status"] != "OPEN":
             raise gl.vm.UserError("EXPECTED: proposal must be OPEN")
         if len(proposal["evidence"]) == 0:
@@ -136,25 +137,22 @@ class CIVEC(gl.Contract):
 
     @gl.public.write
     def close_proposal(self, proposal_id: str) -> None:
-        proposal = self._get(gl.message.sender_address, proposal_id)
+        proposal = self._get(proposal_id); self._require_owner(proposal)
         if proposal["status"] not in ["OPEN", "SCREENED", "ABSTAINED"]:
             raise gl.vm.UserError("EXPECTED: invalid lifecycle transition")
         proposal["status"] = "CLOSED"; self._save(proposal)
 
     @gl.public.view
-    def get_proposal(self, owner: str, proposal_id: str) -> dict:
-        p = self._get(self._address(owner), proposal_id)
+    def get_proposal(self, proposal_id: str) -> dict:
+        p = self._get(proposal_id)
         return dict(p, endorsements=len(p["endorsements"]))
 
     @gl.public.view
-    def list_proposals(self, owner: str) -> list[dict]:
-        owner_address = self._address(owner)
-        prefix = owner_address.as_hex + ":"
+    def list_proposals(self) -> list[dict]:
         result = []
-        for key, raw in self.proposals.items():
-            if key.startswith(prefix):
-                proposal = json.loads(raw)
-                result.append(dict(proposal, endorsements=len(proposal["endorsements"])) )
+        for _, raw in self.proposals.items():
+            proposal = json.loads(raw)
+            result.append(dict(proposal, endorsements=len(proposal["endorsements"])))
         return result
 
     @gl.public.view

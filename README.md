@@ -7,8 +7,8 @@ This folder is the CIVEC GenLayer project: a public civic evidence registry for 
 - Network: GenLayer StudioNet
 - Chain ID: `61999`
 - RPC: `https://studio.genlayer.com/api`
-- Contract: `0x13a59dC130a38421f89401f29e5f7796F6738c00`
-- Deployment tx: `0x2727d13e3e3f47cc327d5861049bc7926582622e14cfb1ab82b02c5c9c535ec0`
+- Contract: `0x8C955a51673EF90B8aC9602D5A3B578ee2361996`
+- Deployment tx: `0x0f252522d818213348b5471e8313f1ae2397dd0579fecf7303c729bc0a3dffc3`
 
 ## Build Contract
 
@@ -28,13 +28,13 @@ The product uses the off-chain-then-settle-on-chain pattern: the browser collect
 
 ## Live Smoke Results
 
-Final smoke proposal: `civec-final-live-20260830`
+Final smoke proposal: `civec-final-20260831`
 
-- `create_proposal`: `0x644b51ed15bb6a296b253c51f2d792aa7d4ada5c0fee9771bed63a622e48dd67` accepted.
-- `add_evidence`: `0x5d9361abc56151aac68a4cec23663d38c264b0cae693c61ec8940c66cea7f4ea` accepted.
-- `request_screening`: `0xf91a54780b4bd150d8579101346d466bd38570150c038e919321fdbd9f5101a6` accepted. Result: `ABSTAINED`, because the public evidence URL was general government information and not claim-specific.
+- `create_proposal`: `0xf558273d30f1b740a6da18cad95ed5a1eefa62f25ff787b6feb2f1c2335cd21a` accepted.
+- `add_evidence`: `0x7891f668cdb8664c209c000d92c7de33c100cc7919eb4924eb41cde94bd1f1b0` accepted.
+- `request_screening`: `0x1670f826629d351649091603dbf0843b9abf16cf465dd9c35374c7a5eb349a51` finalized with successful execution.
 - `endorse`: `0xfff197c3ad54e7dc51a7203e9831861ed0a390fb9687b4d5b0f45c56d9b80019` accepted.
-- `close_proposal`: `0x03b20389b6d7b9b56794e3ef7eae4f351d73459bc43f0d20339d24a3305401aa` accepted.
+- `close_proposal`: `0xac93760d85ce9f10c2cb688499f7122d3b4cdf779f31bc657b59a0b8c077d819` accepted.
 
 ## Local Commands
 
