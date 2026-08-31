@@ -7,8 +7,8 @@ This folder is the CIVEC GenLayer project: a public civic evidence registry for 
 - Network: GenLayer StudioNet
 - Chain ID: `61999`
 - RPC: `https://studio.genlayer.com/api`
-- Contract: `0xc6bde2Aa643AB5c1d0b2c093F6CAfA849B23AA72`
-- Deployment tx: `0xacef4cf918587a0601055895e90be6e402059a91e532429c52aee61d9033e60f`
+- Contract: `0x13a59dC130a38421f89401f29e5f7796F6738c00`
+- Deployment tx: `0x2727d13e3e3f47cc327d5861049bc7926582622e14cfb1ab82b02c5c9c535ec0`
 
 ## Build Contract
 
