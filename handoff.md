@@ -59,3 +59,11 @@ Read the seven handoff documents, inspect the repositoryâ€™s current GenLay
 - Deployment transaction: `0xdb192d2ac562861620e1af14cf956c2d670b79a7e30e3557132d026d9ab82109`.
 - Fresh lifecycle for `civec-final-20260831b`: create `0x1468e7aad295b096721264f1359d171783c1419f5776116616b1bc32e0ffab4a`; evidence `0xf5d877841cc6a8a9c503d5378c41ad78570b3310a6d9e202d075cd6b13a0c5db`; screening `0xf744ebd0ac75bc8a76b44525228e5a7ad0742b8710a9c77cc2371c8de7c41448`; endorsement `0xd0b890fc7f22ca99126a3b4b05004ce2d484a84c49c0af5cb9255ec9979b39c0`; closure `0x9979ea72e12477b0a9f356da834b309ee80cefff8e5436f9099aff043df47453`.
 - Post-close endorsement rejection: `0x50c6012cf4d4bea7fe940c6b0512e7996d7ebebd8419b193a78204c9ccff03e5`, execution payload `EXPECTED: proposal is closed`.
+
+### Feedback implementation - 2026-09-01
+
+- Added HTTP(S) source qualification, owner-only evidence correction, explicit rescreening after `ABSTAINED`, and canonical malformed-output handling.
+- Added Direct Mode coverage for malformed output and abstention recovery, retaining static invariant tests.
+- Updated contract deployed at `0x1056735efD5C1dccAaF9AAE0aab3B3B4Bc69830d`; deployment tx `0x7f6a74aa2e47e234820d0e074aaceae99f4b900792e32db3cc24187ba4ae0e73`.
+- Fresh lifecycle proposal `civec-feedback-20260901`: create `0x5b993a3539824223090acfc594160369fe974d11ae12477f3fb3870f64118464`; evidence `0xe7ed853d871c959c9b5248139bd9e0b55192c0465bba007c4677c70e82d8bcd0`; screening `0x852d91bd583dcaffff48b67233292ecfcb49c38e413771bed8b3e3e3a9c08dbc`, canonical `ABSTAINED` due unavailable evidence. Endorsement and closure were submitted successfully.
+- Local semantic GenVM validation remains blocked by the documented Windows SDK-cache permission error; local Next SWC is invalid, while Vercel performs the production build.

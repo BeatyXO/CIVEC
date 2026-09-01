@@ -37,3 +37,31 @@ def test_unavailable_evidence_abstains(direct_vm, direct_deploy, direct_alice):
     direct_vm.mock_llm(r".*", '{"status":"SCREENED","reason":"unsupported"}')
     result = contract.request_screening("abstain-test")
     assert result["status"] == "ABSTAINED"
+
+
+def test_malformed_screening_output_abstains(direct_vm, direct_deploy, direct_alice):
+    contract = direct_deploy("contracts/civec.py")
+    direct_vm.sender = direct_alice
+    contract.create_proposal("malformed-test", "Crossing", "Ward 3", "Improve access", "Safety")
+    contract.add_evidence("malformed-test", "https://credible.example/report")
+    direct_vm.mock_web(r"credible\.example", {"status": 200, "body": "A public planning report supporting the proposal."})
+    direct_vm.mock_llm(r".*", "not-json")
+    result = contract.request_screening("malformed-test")
+    assert result["status"] == "ABSTAINED"
+    assert "malformed" in result["reason"].lower()
+
+
+def test_abstained_proposal_can_correct_and_rescreen(direct_vm, direct_deploy, direct_alice):
+    contract = direct_deploy("contracts/civec.py")
+    direct_vm.sender = direct_alice
+    contract.create_proposal("recovery-test", "Crossing", "Ward 3", "Improve access", "Safety")
+    contract.add_evidence("recovery-test", "https://bad.example/report")
+    direct_vm.mock_web(r"bad\.example", {"status": 503, "body": ""})
+    assert contract.request_screening("recovery-test")["status"] == "ABSTAINED"
+    contract.replace_evidence("recovery-test", 0, "https://credible.example/report")
+    direct_vm.clear_mocks()
+    direct_vm.mock_web(r"credible\.example", {"status": 200, "body": "A public planning report supporting the proposal."})
+    direct_vm.mock_llm(r".*", '{"status":"SCREENED","reason":"Qualified public evidence supports the proposal."}')
+    result = contract.rescreen_proposal("recovery-test")
+    assert result["status"] == "SCREENED"
+    assert contract.get_proposal("recovery-test")["evidence"][0] == "https://credible.example/report"
