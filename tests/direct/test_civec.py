@@ -65,3 +65,18 @@ def test_abstained_proposal_can_correct_and_rescreen(direct_vm, direct_deploy, d
     result = contract.rescreen_proposal("recovery-test")
     assert result["status"] == "SCREENED"
     assert contract.get_proposal("recovery-test")["evidence"][0] == "https://credible.example/report"
+
+
+def test_validator_disagreement_is_observable_and_rejected(direct_vm, direct_deploy, direct_alice):
+    """Run the captured validator again with a different LLM answer."""
+    contract = direct_deploy("contracts/civec.py")
+    direct_vm.sender = direct_alice
+    contract.create_proposal("disagreement-test", "Crossing", "Ward 3", "Improve access", "Safety")
+    contract.add_evidence("disagreement-test", "https://credible.example/report")
+    direct_vm.mock_web(r"credible\.example", {"status": 200, "body": "A public planning report supporting the proposal."})
+    direct_vm.mock_llm(r".*", '{"status":"SCREENED","reason":"Qualified evidence supports the proposal."}')
+    contract.request_screening("disagreement-test")
+    direct_vm.clear_mocks()
+    direct_vm.mock_web(r"credible\.example", {"status": 200, "body": "A public planning report supporting the proposal."})
+    direct_vm.mock_llm(r".*", '{"status":"ABSTAINED","reason":"The source is not sufficiently authoritative."}')
+    assert direct_vm.run_validator() is False
